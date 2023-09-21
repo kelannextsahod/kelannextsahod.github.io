@@ -59,11 +59,11 @@
 
       let daysLeft = 0;
       if(day > 5 && day <= 19) {
-        daysLeft = twentieth.diff(moment(), 'days')
+        daysLeft = twentieth.diff(moment(), 'days') + 1
       }
 
       if(day >= 21 || day < 4) {
-        daysLeft = fifth.diff(moment(), 'days')
+        daysLeft = fifth.diff(moment(), 'days') + 1
       }
 
       document.getElementById('count').innerHTML = daysLeft
