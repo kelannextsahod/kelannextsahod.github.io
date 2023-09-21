@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <style type="text/css">
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      padding: 0;
+      margin: 0;
+    }
+
+    .counter {
+      display: flex;
+      align-items: center;
+      justify-items: center;
+      height: 100vh;
+    }
+
+    .counter-content {
+      background-color: #8d0019;
+      padding: 3em;
+      border-radius: 1em;
+    }
+
+    .counter > * {
+      margin: 0 auto;
+      text-align: center;
+      color: #fff;
+    }
+
+    .counter h3 {
+      font-size: 2em;
+      background-color: #4b0505;
+      border-radius: .8em;
+      margin: 0;
+      color: #ffe8bb;
+      padding: 1em;
+    }
+
+    .counter h1 {
+      font-size: 20em;
+      margin: 0;
+    }
+    
+  </style>
+  <body>
+    <div class="counter">
+      <div class="counter-content">
+        <h3>Days left until next sahod</h3>
+        <h1 id="count"></h1>
+      </div>
+    </div>
+
+    <script src="moment.js"></script>
+    <script type="text/javascript">
+
+      let day = moment().format('DD')
+
+      let fifth = moment().startOf('month').add(1, 'month').add(4, 'days');
+      let twentieth = moment().startOf('month').add(19, 'days');
+
+      let daysLeft = 0;
+      if(day > 5 && day <= 19) {
+        daysLeft = twentieth.diff(moment(), 'days')
+      }
+
+      if(day >= 21 || day < 4) {
+        daysLeft = fifth.diff(moment(), 'days')
+      }
+
+      document.getElementById('count').innerHTML = daysLeft
+    </script>
+  </body>
+</html>
