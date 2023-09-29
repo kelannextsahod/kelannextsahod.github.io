@@ -1,10 +1,13 @@
+
 <!DOCTYPE html>
 <html>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style type="text/css">
     body {
       font-family: Arial, Helvetica, sans-serif;
       padding: 0;
       margin: 0;
+      background-color: #ffe8bb;
     }
 
     .counter {
@@ -12,11 +15,11 @@
       align-items: center;
       justify-items: center;
       height: 100vh;
+      padding: 2em;
     }
 
     .counter-content {
       background-color: #8d0019;
-      padding: 3em;
       border-radius: 1em;
     }
 
@@ -28,7 +31,7 @@
 
     .counter h3 {
       font-size: 2em;
-      background-color: #4b0505;
+      background-color: #210303;
       border-radius: .8em;
       margin: 0;
       color: #ffe8bb;
@@ -39,34 +42,131 @@
       font-size: 20em;
       margin: 0;
     }
+
+    .selection {
+      padding: 1em;
+    }
+
+    .selection select {
+      width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      margin-bottom: 2em;
+    }
+
+    #result {
+      display: none;
+    }
+
+    .result-container {
+      background-color: #ff5200;
+      padding: 1em;
+      border-radius: .8em;
+    }
+
+    .title {
+      font-size: 3em;
+      margin: 0;
+    }
     
   </style>
   <body>
     <div class="counter">
       <div class="counter-content">
-        <h3>Days left until next sahod</h3>
-        <h1 id="count"></h1>
+        <div class="selection">
+          <h2 class="title">Kelan next sahod?</h2>
+          <select name="scheds" id="scheds" onchange="selectSahod(this.value)">
+            <option value="0">Choose your pay schedule:</option>
+            <option value="520">5th - 20th</option>
+            <option value="1025">10th - 25th</option>
+            <option value="1530">15th - 30th</option>
+          </select>
+        </div>
+        <div id="result">
+          <div class="result-container">
+            <h3 id="text"></h3>
+            <h1 id="count"></h1>
+          </div>
+        </div>
       </div>
     </div>
 
     <script src="moment.js"></script>
     <script type="text/javascript">
 
+      let resultContainer = document.getElementById('result');
       let day = moment().format('DD')
+      let first = 0
+      let second = 0
 
-      let fifth = moment().startOf('month').add(1, 'month').add(4, 'days');
-      let twentieth = moment().startOf('month').add(19, 'days');
+      function selectSahod (param) {
+        resultContainer.style.display = "none"
 
-      let daysLeft = 0;
-      if(day > 5 && day <= 19) {
-        daysLeft = twentieth.diff(moment(), 'days') + 1
+        switch(param) {
+          case '520':
+            first = 4
+            second = 19
+            break;
+
+          case '1025':
+            first = 9
+            second = 24
+            break;
+
+          case '1530':
+            first = 14
+            second = 29
+            break;
+
+          default:
+            return
+        }
+
+        compute(first, second)
+        
+      };
+
+      function compute(first, second) {
+
+        let firstDate = moment().startOf('month').add(1, 'month').add(first, 'days');
+        let secondDate = moment().startOf('month').add(second, 'days');
+        let daysLeft = 0;
+        let text = ''
+        let count = document.getElementById('count');
+        let textContainer = document.getElementById('text')
+
+        if(day > (first + 1) && day <= second) {
+          daysLeft = secondDate.diff(moment(), 'days')  + 1
+        }
+
+        if(day >= (second + 2) || day < first) {
+          daysLeft = firstDate.diff(moment(), 'days')  + 1
+        }
+
+        resultContainer.style.display = "block"
+
+        switch(daysLeft) {
+          case 0:
+            text = 'Wala pa sa account mo?'
+            count.style.display = 'none'
+            textContainer.innerHTML = text
+            break;
+          case 1:
+            text = 'Kalma bes, bukas pa.. sleep ka muna'
+            count.style.display = 'none'
+            textContainer.innerHTML = text
+            break;
+          default:
+            text = 'Days left until next sahod'
+            count.style.display = 'block'
+            count.innerHTML = daysLeft
+            textContainer.innerHTML = text
+        }
       }
-
-      if(day >= 21 || day < 4) {
-        daysLeft = fifth.diff(moment(), 'days') + 1
-      }
-
-      document.getElementById('count').innerHTML = daysLeft
     </script>
   </body>
 </html>
