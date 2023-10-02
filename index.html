@@ -147,6 +147,10 @@
           daysLeft = firstDate.diff(moment(), 'days')  + 1
         }
 
+        if(daysLeft > moment().daysInMonth()) {
+          daysLeft = daysLeft - moment().daysInMonth()
+        }
+
         resultContainer.style.display = "block"
 
         switch(daysLeft) {
